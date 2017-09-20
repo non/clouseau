@@ -19,8 +19,12 @@ object Identity {
    */
   def hash(o: Object): Long = {
     val x = System.identityHashCode(o) & 0xffffffffL
-    val y = (o.hashCode & 0xffffffffL) << 32
-    val z = (o.getClass.hashCode & 0xffffffffL) << 16
-    x ^ y ^ z
+    val y = o.getClass.hashCode & 0xffffffffL
+    try {
+      val z = o.hashCode & 0xffffffffL
+      x ^ (y << 16) ^ (z << 32)
+    } catch { case (e: Exception) =>
+      x ^ (y << 32)
+    }
   }
 }
