@@ -38,6 +38,20 @@ Clouseau is currently unpublished, although a 0.0.1 release is coming
 soon. Once clouseau is published, you will be able to find the JAR
 through the usual dependency resolution systems (Maven, Ivy, etc.).
 
+If you build the JAR yourself, there are some settings you'll need to
+add to SBT to use this library:
+
+```
+// need to use this to set up instrumentation
+javaOptions += "-javaagent:path/to/clouseau.jar"
+
+// needed to start a new JVM with the previous option
+fork := true
+```
+
+(These settings don't currently allow Clouseau to be used in the
+console. I'm still investigating the best way to do this.)
+
 ### Usage
 
 The basic API of Clouseau is intended to be very simple to use:
