@@ -19,8 +19,9 @@ Clouseau turns and collides painfully with the doorway.
 
 Clouseau is a JVM library designed to help estimate the in-memory size
 of various objects on the JVM. This is done using the machinery
-provided by `java.lang.instrument.Instrumentation` as well as the
-reflection API (`java.lang.reflect.*`).
+provided by
+[java.lang.instrument.Instrumentation](https://docs.oracle.com/javase/8/docs/api/java/lang/instrument/Instrumentation.html)
+as well as the Java reflection API.
 
 Currently you can build the project and use the JAR file it produces
 in your won projects.
