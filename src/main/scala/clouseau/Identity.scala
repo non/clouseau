@@ -5,8 +5,8 @@ import java.lang.System
 object Identity {
 
   /**
-   * Best-effort attempt to hash distinct (but identical) objects to
-   * different Long values.
+   * Best-effort attempt to hash distinct (but equal/identical)
+   * objects to different Long values.
    *
    * System.identityHashCode is controlled by the JVM (and likely
    * based on internal IDs used for GC, or memory layout). o.hashCode
