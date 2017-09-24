@@ -11,7 +11,6 @@ import r.Modifier.isStatic
 object Members {
 
   def of(o: Object, mode: Mode): SizeOf = {
-    import SizeOf._
     val c = o.getClass
     if (c.isArray) ofArray(o, c, mode) else ofClass(o, c, mode)
   }

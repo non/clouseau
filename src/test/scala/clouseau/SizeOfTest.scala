@@ -97,9 +97,9 @@ object SizeOfTest extends Properties("SizeOf") {
   val profiles: Vector[Prof] =
     Vector(
       Prof.range("Array[Int]", _.toArray),
-      Prof.range("debox.Buffer[Int]", { r => val b = debox.Buffer.empty[Int]; b ++= r; b }),
-      Prof.range("debox.Set[Int]", { r => val s = debox.Set.empty[Int]; s ++= r; s }),
-      Prof.range("debox.Map[Int,Int]", build(debox.Map.empty[Int, Int]) { (m, n) => m(n) = n; m }),
+      // Prof.range("debox.Buffer[Int]", { r => val b = debox.Buffer.empty[Int]; b ++= r; b }),
+      // Prof.range("debox.Set[Int]", { r => val s = debox.Set.empty[Int]; s ++= r; s }),
+      // Prof.range("debox.Map[Int,Int]", build(debox.Map.empty[Int, Int]) { (m, n) => m(n) = n; m }),
       Prof.range("immutable.BitSet", r => immutable.BitSet(r: _*)),
       Prof.range("immutable.IntMap[Int]", r => immutable.IntMap(r.map(i => (i, i)): _*)),
       Prof.range("immutable.List[Int]", _.toList),
@@ -130,7 +130,7 @@ object SizeOfTest extends Properties("SizeOf") {
       Prof.range("j.u.Vector[Int]", build(new u.Vector[Int])((v, n) => v.add(n)))
     ).sortBy(_.name)
 
-  def build[C](init: => C)(f: (C, Int) => Unit): Range => C = { r =>
+  def build[C, U](init: => C)(f: (C, Int) => U): Range => C = { r =>
     val c = init
     r.foreach { n => f(c, n) }
     c
