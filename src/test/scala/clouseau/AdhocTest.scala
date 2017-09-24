@@ -36,4 +36,26 @@ object AdHocTest extends Properties("AdHoc") {
     println("fullSizeOf(o) = %d" format Calculate.fullSizeOf(o))
     true
   }
+
+  property("readme") = {
+    import clouseau.Mode.JustClass
+    import clouseau.Calculate.{calculate, sizeOf}
+    import scala.collection.mutable
+
+    val s = mutable.Set.empty[Long]
+
+    val m0 = (1 to 100).iterator.map(i => (i, i.toString)).toMap
+    val bytes0 = calculate(m0, s, JustClass).bytes //
+
+    val m1 = m0.updated(99, "ninety-nine")
+    val bytes1 = calculate(m1, s, JustClass).bytes
+
+    val m2 = m1.updated(1, "one")
+    val bytes2 = calculate(m2, s, JustClass).bytes
+
+    println((bytes0, sizeOf(m0)))
+    println((bytes1, sizeOf(m1)))
+    println((bytes2, sizeOf(m2)))
+    true
+  }
 }

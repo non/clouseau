@@ -155,6 +155,44 @@ members. It's possible that hash collisions will cause us to
 undercount, but in practice this should be very unlikely. See
 `clouseau.Identity.hash` for more information.
 
+The lower-level `calculate` method will return the set of all hash
+codes that we've seen so far in addition to an estimate. This makes it
+possible to do more advanced profiling, such as measuring an *initial
+state*, followed by one or more measurements which will only measure
+the additional memory used since the initial sate.
+
+Here's an example of using `calculate`:
+
+```scala
+import clouseau.Mode.JustClass
+import clouseau.Calculate.{calculate, sizeOf}
+import scala.collection.mutable
+
+val s = mutable.Set.empty[Long]
+
+val m0 = (1 to 100).iterator.map(i => (i, i.toString)).toMap
+val bytes0 = calculate(m0, s, JustClass).bytes //
+
+val m1 = m0.updated(99, "ninety-nine")
+val bytes1 = calculate(m1, s, JustClass).bytes
+
+println((bytes0, sizeOf(m0))) // (13840,13840)
+println((bytes1, sizeOf(m1))) // (336,13856)
+```
+
+The values `bytes0` and `sizeOf(m0)` are identical. This means that
+all of the data in `m0` is being counted for the first time. By
+contrast, `bytes1` is much smaller than `sizeOf(m1)`, which means that
+most of the objects being referenced by `m1` had already been counted
+by the first `calculate` call. Since `s` is a mutable set, as long as
+we use the same set we ensure that repeatedly-referenced objects will
+not be counted again.
+
+The `Mode` used in this example (`JustClass`) corresponds to the logic
+of the `sizeOf` method. The other modes (`JustStatic` and
+`ClassAndStatic`) correspond to the `staticSizeOf` and `fullSizeOf`
+methods respectively.
+
 ### Caveats
 
 Clouseau is based around the `getObjectSize` method from the
