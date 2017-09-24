@@ -50,7 +50,7 @@ object Calculate {
           else {
             seen += x
             val n = if (mode.includeClass) inst.getObjectSize(o) - enumCost(o) else 0L
-            loop(Members.of(o, mode) :: rest, bytes + n)
+            loop(Members.of(o, seen, mode) :: rest, bytes + n)
           }
         case Fields(o, fs, mode) :: rest =>
           loop(Sum(fs.map(f => Instance(f.get(o), mode))) :: rest, bytes)

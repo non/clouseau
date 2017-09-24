@@ -34,10 +34,15 @@ lazy val clouseauSettings = Seq(
   // fatal errors).
   scalacOptions in (Compile, console) ~= { _.filterNot("-Xlint" == _) },
   scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value,
-  javaOptions += "-javaagent:target/scala-2.12/clouseau_2.12-0.1-SNAPSHOT.jar",
+
+  // settings for packaging instrumentation correctly
   packageOptions in (Compile, packageBin) +=
     Package.ManifestAttributes("Premain-Class" -> "clouseau.Inst"),
+
+  // settings needed for using instrumenation correctly
+  javaOptions += "-javaagent:target/scala-2.12/clouseau_2.12-0.1-SNAPSHOT.jar",
   fork := true,
+
   // release stuff
   releaseCrossBuild := true,
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,

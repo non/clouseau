@@ -45,6 +45,30 @@ object SizeOfTest extends Properties("SizeOf") {
     s1 >= s0 && s0 >= 0L
   }
 
+  // sizeOf(a) includes
+  //   - instance members of a's instance members.
+  //
+  // staticSizeOf(a) includes
+  //   - instance members of a's static members.
+  //   - static members of a's static members.
+  //
+  // fullSize(a) includes
+  //   - instance members of a's instance members.
+  //   - instance members of a's static members.
+  //   - static members of a's instance members.
+  //   - static members of a's static members.
+  //
+  // therefore, the following inequality doesn't hold, since the sum
+  // fails to cover 'static members of a's instance members'.
+
+  // property("(sizeOf(a) + staticSizeOf(a)) >= fullSize(a)") = forAll { (a0: Anything) =>
+  //   val a = a0.value
+  //   val s0 = sizeOf(a)
+  //   val s1 = staticSizeOf(a)
+  //   val s2 = fullSizeOf(a)
+  //   (s0 + s1) >= s2
+  // }
+
   property("sizeOf(x :: xs) > sizeOf(xs)") =
     forAll { (x0: Anything, xs0: List[Anything]) =>
       val (x, xs) = (x0.value, xs0.map(_.value))

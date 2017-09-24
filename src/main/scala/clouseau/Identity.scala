@@ -27,4 +27,6 @@ object Identity {
       x ^ (y << 32)
     }
   }
+
+  def hashClass(c: Class[_]): Long = hash(c)
 }
