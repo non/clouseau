@@ -86,11 +86,10 @@ results of `sizeOf(x)` and `staticSizeOf(x)` to get the
 Now, looking at `o`, we see that `sizeOf(o)` is less than twice
 `sizeOf(x)`. This is because the list stores two references to `x`, so
 we don't count `sizeOf(x)` twice (although we *will* count the size of
-two references, which on a 64-bit JVM are 8 bytes each). The 144 bytes
-of `sizeOf(o)` will include the 80 bytes of `x` once, as well as 64
-bytes of other data. These data are likely references: two different
-references to `x`, as well as the references to cons cells that make
-up a linked list.
+two references). The 144 bytes of `sizeOf(o)` will include the 80
+bytes of `x` once, as well as 64 bytes of other data. These data are
+likely references: two different references to `x`, as well as the
+references to cons cells that make up a linked list.
 
 The 16 bytes of `staticSize(o)` likely includes the static `Nil` value
 that all lists share. Notice that `fullSize(o)` is 216 bytes, which is
