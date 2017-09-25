@@ -79,10 +79,11 @@ For example, consider the following:
 import clouseau.Calculate._
 
 val x = "this is a sentence"
-val o = List(x, x)
 sizeOf(x)       //  80 bytes
 staticSizeOf(x) //  48 bytes
 fullSizeOf(x)   // 128 bytes
+
+val o = List(x, x)
 sizeOf(o)       // 144 bytes
 staticSizeOf(o) //  16 bytes
 fullSizeOf(o)   // 216 bytes
@@ -105,8 +106,8 @@ bytes of `x` once, as well as 64 bytes of other data. These data are
 likely references: two different references to `x`, as well as the
 references to cons cells that make up a linked list.
 
-The 16 bytes of `staticSize(o)` likely includes the static `Nil` value
-that all lists share. Notice that `fullSize(o)` is 216 bytes, which is
+The 16 bytes of `staticSize(o)` includes the static `Nil` value that
+all lists share. Notice that `fullSize(o)` is 216 bytes, which is
 significantly more than `sizeOf(o) + staticSize(o)` (160 bytes). The
 reason here is that we are also including static fields referenced by
 the values that make up the list (in this case `x`).
@@ -114,9 +115,9 @@ the values that make up the list (in this case `x`).
 (See the *Caveats* section to get an idea of the limitations of these
 kinds of estimates.)
 
-There is also a compatibility API provided for Java, which exposes
-static methods (which are easier to call than methods on Scala
-objects).
+There is also a compatibility API provided for Java. This API exposes
+static methods that should be easier to call from Java than methods on
+Scala objects.
 
 ```java
 import clouseau.compat.Calculate;
@@ -185,7 +186,7 @@ import scala.collection.mutable
 val s = mutable.Set.empty[Long]
 
 val m0 = (1 to 100).iterator.map(i => (i, i.toString)).toMap
-val bytes0 = calculate(m0, s, JustClass).bytes //
+val bytes0 = calculate(m0, s, JustClass).bytes
 
 val m1 = m0.updated(99, "ninety-nine")
 val bytes1 = calculate(m1, s, JustClass).bytes
@@ -198,9 +199,11 @@ The values `bytes0` and `sizeOf(m0)` are identical. This means that
 all of the data in `m0` is being counted for the first time. By
 contrast, `bytes1` is much smaller than `sizeOf(m1)`, which means that
 most of the objects being referenced by `m1` had already been counted
-by the first `calculate` call. Since `s` is a mutable set, as long as
-we use the same set we ensure that repeatedly-referenced objects will
-not be counted again.
+by the first `calculate` call. Only 2.4% of the total size of `m1` has
+to be allocated; the other 97.6% is shared!
+
+(Since `s` is a mutable set, as long as we use the same set we ensure
+that repeatedly-referenced objects will not be counted again.)
 
 The `Mode` used in this example (`JustClass`) corresponds to the logic
 of the `sizeOf` method. The other modes (`JustStatic` and
@@ -247,6 +250,7 @@ Here are some directions Clouseau will (hopefully) be moving in:
  6. Provide better documentation and intuitions around JVM memory usage.
  7. Provide a "fall back" strategy that avoids `Instrumentation` when unavailable.
  8. Compare different JVMs and JVM versions.
+ 9. Provide more flexible/extensible API for traversing fields.
 
 ### See Also
 
