@@ -3,16 +3,16 @@
 ### Preamble
 
 ```
-            LADY LITTON
-    I hope you locate the trouble, monsieur.
+                LADY LITTON
+        I hope you locate the trouble, monsieur.
 
-            INSPECTER CLOUSEAU
-    Madame, it is my business to locate trouble.
+                INSPECTER CLOUSEAU
+        Madame, it is my business to locate trouble.
     
 Clouseau turns and collides painfully with the doorway.
 
-            INSPECTER CLOUSEAU
-    No trouble back there!
+                INSPECTER CLOUSEAU
+        No trouble back there!
 ```
 
 ### Overview
