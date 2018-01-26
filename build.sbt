@@ -5,9 +5,9 @@ import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
 lazy val noPublish = Seq(publish := {}, publishLocal := {}, publishArtifact := false)
 
 lazy val clouseauSettings = Seq(
-  organization := "com.stripe",
-  scalaVersion := "2.12.3",
-  crossScalaVersions := Seq("2.10.6", "2.11.11", "2.12.3"),
+  organization := "org.spire-math",
+  scalaVersion := "2.12.4",
+  crossScalaVersions := Seq("2.10.6", "2.11.11", "2.12.4"),
   libraryDependencies ++= (
     "org.scalacheck" %% "scalacheck" % "1.13.5" % Test ::
     Nil),
@@ -71,7 +71,7 @@ lazy val clouseauSettings = Seq(
       Some("Releases" at nexus + "service/local/staging/deploy/maven2")
   },
   pomExtra := (
-    <url>https://github.com/stripe/clouseau</url>
+    <url>https://github.com/non/clouseau</url>
     <licenses>
       <license>
         <name>Apache 2</name>
@@ -81,8 +81,8 @@ lazy val clouseauSettings = Seq(
       </license>
     </licenses>
     <scm>
-      <url>git@github.com:stripe/clouseau.git</url>
-      <connection>scm:git:git@github.com:stripe/clouseau.git</connection>
+      <url>git@github.com:non/clouseau.git</url>
+      <connection>scm:git:git@github.com:non/clouseau.git</connection>
     </scm>
     <developers>
       <developer>
@@ -97,7 +97,7 @@ lazy val clouseauSettings = Seq(
 ) ++ mimaDefaultSettings
 
 def previousArtifact(suffix: String) =
-  "com.stripe" %% s"clouseau$suffix" % "0.2.0"
+  "org.spire-math" %% s"clouseau$suffix" % "0.2.0"
 
 lazy val core = project
   .in(file("."))
