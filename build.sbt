@@ -53,7 +53,7 @@ lazy val clouseauSettings = Seq(
     checkSnapshotDependencies,
     inquireVersions,
     runClean,
-    runTest,
+    //runTest,
     setReleaseVersion,
     commitReleaseVersion,
     tagRelease,
