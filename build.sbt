@@ -106,15 +106,15 @@ lazy val core = project
   .settings(clouseauSettings: _*)
   .settings(mimaPreviousArtifacts := Set(previousArtifact("")))
 
-lazy val docs = project
-  .in(file("docs"))
-  .dependsOn(core)
-  .settings(name := "clouseau-docs")
-  .settings(clouseauSettings: _*)
-  .settings(noPublish: _*)
-  .settings(tutSettings: _*)
-  .settings(tutScalacOptions := {
-    val testOptions = scalacOptions.in(test).value
-    val unwantedOptions = Set("-Xlint", "-Xfatal-warnings")
-    testOptions.filterNot(unwantedOptions)
-  })
+// lazy val docs = project
+//   .in(file("docs"))
+//   .dependsOn(core)
+//   .settings(name := "clouseau-docs")
+//   .settings(clouseauSettings: _*)
+//   .settings(noPublish: _*)
+//   .settings(tutSettings: _*)
+//   .settings(tutScalacOptions := {
+//     val testOptions = scalacOptions.in(test).value
+//     val unwantedOptions = Set("-Xlint", "-Xfatal-warnings")
+//     testOptions.filterNot(unwantedOptions)
+//   })
