@@ -173,8 +173,8 @@ object SizeOfTest extends Properties("SizeOf") {
 
   property("collection benchmark") = {
     import java.io._
-    val logFile: Option[String] = Some("measurements.log")
-    //val logFile: Option[String] = None
+    //val logFile: Option[String] = Some("measurements.log")
+    val logFile: Option[String] = None
     val os: OutputStream = logFile match {
       case Some(path) => new FileOutputStream(new File(path))
       case None => System.out
