@@ -226,11 +226,27 @@ of the `sizeOf` method. The other modes (`JustStatic` and
 `ClassAndStatic`) correspond to the `staticSizeOf` and `fullSizeOf`
 methods respectively.
 
+Clouseau also includes a method for producing human-readable sizes:
+
+```scala
+import clouseau.Units
+
+(1 to 5).foreach { i =>
+  val bytes = math.pow(137, i.toDouble).toLong
+  println(Units.approx(bytes))
+}
+// 137B
+// 18.3K
+// 2.45M
+// 336M
+// 44.9G
+```
+
 ### Caveats
 
 Clouseau is based around the `getObjectSize` method from the
 `java.lang.instrumentation.Instrumentation` class. From that method's
-documentation:
+[documentation](https://docs.oracle.com/javase/8/docs/api/java/lang/instrument/Instrumentation.html#getObjectSize-java.lang.Object-):
 
 > Returns an implementation-specific approximation of the amount of
 > storage consumed by the specified object. The result may include
