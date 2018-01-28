@@ -46,20 +46,21 @@ Java process at the Clouseau jar file via the `-javaagent` parameter.
 This makes including Clouseau via `libraryDependencies` (as above)
 much less useful.
 
-You can download the Clouseau directly via the following links:
+You can download the Clouseau jar file directly via the following
+links:
 
  * [version 0.1.0, scala 2.12](https://search.maven.org/remotecontent?filepath=org/spire-math/clouseau_2.12/0.1.0/clouseau_2.12-0.1.0.jar).
  * [version 0.1.0, scala 2.11](https://search.maven.org/remotecontent?filepath=org/spire-math/clouseau_2.11/0.1.0/clouseau_2.11-0.1.0.jar).
  * [version 0.1.0, scala 2.10](https://search.maven.org/remotecontent?filepath=org/spire-math/clouseau_2.10/0.1.0/clouseau_2.10-0.1.0.jar).
 
-If you've downloaded Clouseau to `path/to/clouseau.jar` you'd include
+If you had downloaded Clouseau to `path/to/clouseau.jar` you'd include
 it in your project via the following configuration:
 
 ```
 // need to use this to set up instrumentation
 javaOptions += "-javaagent:path/to/clouseau.jar"
 
-// needed to start a new JVM with the previous option
+// needed to start a new JVM using the -javaagent
 fork := true
 ```
 
