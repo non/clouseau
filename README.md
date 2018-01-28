@@ -8,7 +8,7 @@
 
                 INSPECTER CLOUSEAU
         Madame, it is my business to locate trouble.
-    
+
 Clouseau turns and collides painfully with the doorway.
 
                 INSPECTER CLOUSEAU
@@ -34,12 +34,25 @@ instrumentation automatically set up.
 
 Clouseau supports Java 1.6+, and Scala 2.10, 2.11, and 2.12.
 
-Clouseau is currently unpublished, although a 0.0.1 release is coming
-soon. Once clouseau is published, you will be able to find the JAR
-through the usual dependency resolution systems (Maven, Ivy, etc.).
+Clouseau is available on Maven Central. You can include the Clouseau
+library in your project via:
 
-If you build the JAR yourself, there are some settings you'll need to
-add to SBT to use this library:
+```scala
+libraryDependencies += "org.spire-math" %% "clouseau" % "0.1.0"
+```
+
+Unfortunately, to actually *use* Clouseau you'll need to point you
+Java process to the Clouseau jar manually via the `-javaagent`
+parameter. This makes the above configuration option much less useful.
+
+You can download the Clouseau directly via the following links:
+
+ * [version 0.1.0, scala 2.12](https://search.maven.org/remotecontent?filepath=org/spire-math/clouseau_2.12/0.1.0/clouseau_2.12-0.1.0.jar).
+ * [version 0.1.0, scala 2.11](https://search.maven.org/remotecontent?filepath=org/spire-math/clouseau_2.11/0.1.0/clouseau_2.11-0.1.0.jar).
+ * [version 0.1.0, scala 2.10](https://search.maven.org/remotecontent?filepath=org/spire-math/clouseau_2.10/0.1.0/clouseau_2.10-0.1.0.jar).
+
+If you've downloaded Clouseau to `path/to/clouseau.jar` you'd include
+it in your project via the following configuration:
 
 ```
 // need to use this to set up instrumentation
@@ -49,8 +62,9 @@ javaOptions += "-javaagent:path/to/clouseau.jar"
 fork := true
 ```
 
-(These settings don't currently allow Clouseau to be used in the
-console. I'm still investigating the best way to do this.)
+(If anyone knows a way of configuring an SBT project to download a
+dependency and seamlessly use the downloaded path as an argument to
+`javaOptions`, please get in touch.)
 
 ### Usage
 
