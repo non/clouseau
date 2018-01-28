@@ -41,9 +41,10 @@ library in your project via:
 libraryDependencies += "org.spire-math" %% "clouseau" % "0.1.0"
 ```
 
-Unfortunately, to actually *use* Clouseau you'll need to point you
-Java process to the Clouseau jar manually via the `-javaagent`
-parameter. This makes the above configuration option much less useful.
+Unfortunately, to actually *use* Clouseau you'll need to point your
+Java process at the Clouseau jar file via the `-javaagent` parameter.
+This makes including Clouseau via `libraryDependencies` (as above)
+much less useful.
 
 You can download the Clouseau directly via the following links:
 
