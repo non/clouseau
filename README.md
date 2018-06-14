@@ -36,15 +36,15 @@ Clouseau supports Java 1.6+, and Scala 2.10, 2.11, and 2.12.
 
 Clouseau is available on Maven Central. The easiest way to use
 Clouseau with SBT is to enable the
-[sbt-javaagent](https://github.com/sbt/sbt-javaagent) plugin:
+[sbt-javaagent](https://github.com/sbt/sbt-javaagent) plugin.
 
-#### project/plugins.sbt
+In `project/plugins.sbt` you'd add:
 
 ```scala
 addSbtPlugin("com.lightbend.sbt" % "sbt-javaagent" % "0.1.4")
 ```
 
-#### build.sbt
+In `build.sbt` you'd add:
 
 ```scala
 enablePlugins(JavaAgent)
