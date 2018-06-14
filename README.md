@@ -34,39 +34,45 @@ instrumentation automatically set up.
 
 Clouseau supports Java 1.6+, and Scala 2.10, 2.11, and 2.12.
 
-Clouseau is available on Maven Central. You can include the Clouseau
-library in your project via:
+Clouseau is available on Maven Central. The easiest way to use
+Clouseau with SBT is to enable the
+[sbt-javaagent](https://github.com/sbt/sbt-javaagent) plugin:
+
+#### project/plugins.sbt
 
 ```scala
-libraryDependencies += "org.spire-math" %% "clouseau" % "0.1.0"
+addSbtPlugin("com.lightbend.sbt" % "sbt-javaagent" % "0.1.4")
 ```
 
-Unfortunately, to actually *use* Clouseau you'll need to point your
-Java process at the Clouseau jar file via the `-javaagent` parameter.
-This makes including Clouseau via `libraryDependencies` (as above)
-much less useful.
+#### build.sbt
 
-You can download the Clouseau jar file directly via the following
-links:
+```scala
+enablePlugins(JavaAgent)
+
+// assumes you're using scala 2.12.x; change as-needed
+javaAgents += "org.spire-math" % "clouseau_2.12" % "0.1.0" % "compile;runtime"
+```
+
+### Less Quick Start
+
+You can also use Clouseau manually using `-javaagent` explicitly.
+
+Download the Clouseau jar file using the appropriate link:
 
  * [version 0.1.0, scala 2.12](https://search.maven.org/remotecontent?filepath=org/spire-math/clouseau_2.12/0.1.0/clouseau_2.12-0.1.0.jar).
  * [version 0.1.0, scala 2.11](https://search.maven.org/remotecontent?filepath=org/spire-math/clouseau_2.11/0.1.0/clouseau_2.11-0.1.0.jar).
  * [version 0.1.0, scala 2.10](https://search.maven.org/remotecontent?filepath=org/spire-math/clouseau_2.10/0.1.0/clouseau_2.10-0.1.0.jar).
 
 If you had downloaded Clouseau to `path/to/clouseau.jar` you'd include
-it in your project via the following configuration:
+Clouseau in your project via the following `build.sbt` configuration:
 
-```
+```scala
 // need to use this to set up instrumentation
 javaOptions += "-javaagent:path/to/clouseau.jar"
 
 // needed to start a new JVM using the -javaagent
 fork := true
 ```
-
-(If anyone knows a way of configuring an SBT project to download a
-dependency and seamlessly use the downloaded path as an argument to
-`javaOptions`, please get in touch.)
 
 ### Usage
 
@@ -167,7 +173,7 @@ Some important things to notice are:
  1. We can't assume that any of these counts don't overlap. It's
     possible that an object counted in `sizeOf(x)` is also referenced
     in a static field counted by `staticSizeOf(x)`.
-    
+
  2. `fullSizeOf(x)` will potentially include values that weren't
     counted by either `sizeOf` or `staticSizeOf`. For example, if `x`
     has a (non-static) field referencing `y`, and `y` has a static
@@ -296,4 +302,4 @@ isn't under active development and doesn't seem to distribute JAR files.
 All code is available to you under the Apache 2 license, available at
 https://opensource.org/licenses/Apache-2.0.
 
-Copyright Erik Osheim, 2017.
+Copyright Erik Osheim, 2017-2018.
