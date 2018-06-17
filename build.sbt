@@ -1,34 +1,35 @@
 import ReleaseTransformations._
 
-import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
-
-lazy val noPublish = Seq(publish := {}, publishLocal := {}, publishArtifact := false)
+lazy val noPublish = Seq(
+  publish := {},
+  publishLocal := {},
+  publishArtifact := false)
 
 lazy val clouseauSettings = Seq(
   organization := "org.spire-math",
   scalaVersion := "2.12.4",
   crossScalaVersions := Seq("2.10.6", "2.11.11", "2.12.4"),
-  libraryDependencies ++= (
-    "org.scalacheck" %% "scalacheck" % "1.13.5" % Test ::
-    Nil),
-  scalacOptions ++= Seq(
-    "-deprecation",
-    "-encoding",
-    "UTF-8",
-    "-feature",
-    "-language:existentials",
-    "-language:higherKinds",
-    "-language:implicitConversions",
-    "-language:experimental.macros",
-    "-unchecked",
-    "-Xfatal-warnings",
-    "-Xlint",
-    "-Yno-adapted-args",
-    "-Ywarn-dead-code",
-    "-Ywarn-numeric-widen",
-    "-Ywarn-value-discard",
-    "-Xfuture"
-  ),
+  libraryDependencies ++=
+    "org.scalacheck" %% "scalacheck" % "1.14.0" % Test ::
+    Nil,
+  scalacOptions ++=
+    "-deprecation" ::
+    "-encoding" ::
+    "UTF-8" ::
+    "-feature" ::
+    "-language:existentials" ::
+    "-language:higherKinds" ::
+    "-language:implicitConversions" ::
+    "-language:experimental.macros" ::
+    "-unchecked" ::
+    "-Xfatal-warnings" ::
+    "-Xlint" ::
+    "-Yno-adapted-args" ::
+    "-Ywarn-dead-code" ::
+    "-Ywarn-numeric-widen" ::
+    "-Ywarn-value-discard" ::
+    "-Xfuture" ::
+    Nil,
   // HACK: without these lines, the console is basically unusable,
   // since all imports are reported as being unused (and then become
   // fatal errors).
@@ -38,10 +39,6 @@ lazy val clouseauSettings = Seq(
   // settings for packaging instrumentation correctly
   packageOptions in (Compile, packageBin) +=
     Package.ManifestAttributes("Premain-Class" -> "clouseau.Inst"),
-
-  // settings needed for using instrumenation correctly
-  javaOptions += "-javaagent:target/scala-2.12/clouseau_2.12-0.1-SNAPSHOT.jar",
-  fork := true,
 
   // release stuff
   releaseCrossBuild := true,
@@ -60,7 +57,7 @@ lazy val clouseauSettings = Seq(
     publishArtifacts,
     setNextVersion,
     commitNextVersion,
-    ReleaseStep(action = Command.process("sonatypeReleaseAll", _)),
+    releaseStepCommand("sonatypeReleaseAll"),
     pushChanges
   ),
   publishTo := {
@@ -91,30 +88,26 @@ lazy val clouseauSettings = Seq(
         <url>http://github.com/non/</url>
       </developer>
     </developers>
-  ),
-  coverageMinimum := 60,
-  coverageFailOnMinimum := false
-) ++ mimaDefaultSettings
-
-def previousArtifact(suffix: String) =
-  "org.spire-math" %% s"clouseau$suffix" % "0.2.0"
+  )
+)
 
 lazy val core = project
-  .in(file("."))
-  .settings(name := "clouseau")
-  .settings(moduleName := "clouseau")
+  .in(file("core"))
   .settings(clouseauSettings: _*)
-  .settings(mimaPreviousArtifacts := Set(previousArtifact("")))
+  .settings(Seq(
+    name := "clouseau",
+    moduleName := "clouseau"))
 
-// lazy val docs = project
-//   .in(file("docs"))
-//   .dependsOn(core)
-//   .settings(name := "clouseau-docs")
-//   .settings(clouseauSettings: _*)
-//   .settings(noPublish: _*)
-//   .settings(tutSettings: _*)
-//   .settings(tutScalacOptions := {
-//     val testOptions = scalacOptions.in(test).value
-//     val unwantedOptions = Set("-Xlint", "-Xfatal-warnings")
-//     testOptions.filterNot(unwantedOptions)
-//   })
+lazy val repl = project
+  .in(file("repl"))
+  .settings(clouseauSettings: _*)
+  .settings(Seq(
+    name := "clouseau-repl",
+    moduleName := "clouseau-repl",
+    libraryDependencies ++=
+      "org.scala-lang" % "scala-compiler" % scalaVersion.value ::
+      Nil,
+    javaOptions += "-javaagent:../target/scala-2.12/clouseau_2.12-0.1.1-SNAPSHOT.jar",
+    fork := true,
+    outputStrategy := Some(StdoutOutput),
+    connectInput in run := true))
