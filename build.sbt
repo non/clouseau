@@ -92,7 +92,7 @@ lazy val clouseauSettings = Seq(
 )
 
 lazy val core = project
-  .in(file("core"))
+  .in(file("."))
   .settings(clouseauSettings: _*)
   .settings(Seq(
     name := "clouseau",
