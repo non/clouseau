@@ -252,7 +252,8 @@ import clouseau.Units
 
 One natural use of Clouseau is in the REPL, where it can estimate the
 space used by interactively-constructed values. However SBT does not
-currently support forking the `console` command, making it difficult
+currently support forking the `console` command
+([#1918](https://github.com/sbt/sbt/issues/1918)), making it difficult
 to use Clouseau interactively. The *clouseau-repl* module solves this
 problem by providing a main class which can be `run` from SBT (i.e.
 avoiding the `console` command entirely).
