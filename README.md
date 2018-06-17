@@ -248,6 +248,37 @@ import clouseau.Units
 // 44.9G
 ```
 
+### Using Clouseau in the REPL
+
+One natural use of Clouseau is in the REPL, where it can estimate the
+space used by interactively-constructed values. However SBT does not
+currently support forking the `console` command, making it difficult
+to use Clouseau interactively. The *clouseau-repl* module solves this
+problem by providing a main class which can be `run` from SBT
+interactively.
+
+To use *clouseau-repl* from within your project, first follow the
+*Quick Start* guide for including Clouseau. Once Clouseau is included,
+add the following to your `build.sbt` file:
+
+```scala
+libraryDependencies += "org.spire-math" %% "clouseau-repl" % "0.1.0"
+
+// this main class runs the standard scala REPL
+mainClass in Compile := Some("clouseau.Repl")
+
+// allows forked processes to read from SBT's stdin
+connectInput in run := true
+
+// don't buffer stdout, so the user can see prompt, input, etc.
+outputStrategy := Some(StdoutOutput)
+```
+
+After these changes, the `run` command can be used to launch the REPL.
+
+Hopefully in the future SBT will support running a forked `console`,
+at which point this module and configuration will become unnecessary.
+
 ### Caveats
 
 Clouseau is based around the `getObjectSize` method from the
@@ -280,15 +311,13 @@ correct result along with the JVM version you are using.
 
 Here are some directions Clouseau will (hopefully) be moving in:
 
- 1. Ability to use Clouseau from the SBT console.
- 2. Providing an SBT plugin for use in other projects (may subsume 1).
- 3. Improve accuracy of primitives/enumerations.
- 4. Verify estimates against other tools (YourKit, JProfiler, etc.)
- 5. Compare estimates before/after Hotspot JITs the relevant classes.
- 6. Provide better documentation and intuitions around JVM memory usage.
- 7. Provide a "fall back" strategy that avoids `Instrumentation` when unavailable.
- 8. Compare different JVMs and JVM versions.
- 9. Provide more flexible/extensible API for traversing fields.
+ 1. Improve accuracy of primitives/enumerations.
+ 2. Verify estimates against other tools (YourKit, JProfiler, etc.)
+ 3. Compare estimates before/after Hotspot JITs the relevant classes.
+ 4. Provide better documentation and intuitions around JVM memory usage.
+ 5. Provide a "fall back" strategy that avoids `Instrumentation` when unavailable.
+ 6. Compare different JVMs and JVM versions.
+ 7. Provide more flexible/extensible API for traversing fields.
 
 ### See Also
 
