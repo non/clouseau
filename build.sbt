@@ -100,14 +100,15 @@ lazy val core = project
 
 lazy val repl = project
   .in(file("repl"))
+  .enablePlugins(JavaAgent)
   .settings(clouseauSettings: _*)
+  .settings(javaAgents += "org.spire-math" % "clouseau_2.12" % "0.2.0" % "compile;runtime")
   .settings(Seq(
     name := "clouseau-repl",
     moduleName := "clouseau-repl",
     libraryDependencies ++=
       "org.scala-lang" % "scala-compiler" % scalaVersion.value ::
       Nil,
-    javaOptions += "-javaagent:../target/scala-2.12/clouseau_2.12-0.1.1-SNAPSHOT.jar",
-    fork := true,
+    mainClass in Compile := Some("clouseau.Repl"),
     outputStrategy := Some(StdoutOutput),
     connectInput in run := true))
