@@ -50,7 +50,7 @@ In `build.sbt` you'd add:
 enablePlugins(JavaAgent)
 
 // assumes you're using scala 2.12.x; change as-needed
-javaAgents += "org.spire-math" % "clouseau_2.12" % "0.2.0" % "compile;runtime"
+javaAgents += "org.spire-math" % "clouseau_2.12" % "0.2.2" % "compile;runtime"
 ```
 
 ### Less Quick Start
@@ -59,9 +59,9 @@ You can also use Clouseau manually using `-javaagent` explicitly.
 
 Download the Clouseau jar file using the appropriate link:
 
- * [version 0.2.0, scala 2.12](https://search.maven.org/remotecontent?filepath=org/spire-math/clouseau_2.12/0.2.0/clouseau_2.12-0.2.0.jar).
- * [version 0.2.0, scala 2.11](https://search.maven.org/remotecontent?filepath=org/spire-math/clouseau_2.11/0.2.0/clouseau_2.11-0.2.0.jar).
- * [version 0.2.0, scala 2.10](https://search.maven.org/remotecontent?filepath=org/spire-math/clouseau_2.10/0.2.0/clouseau_2.10-0.2.0.jar).
+ * [version 0.2.2, scala 2.12](https://search.maven.org/remotecontent?filepath=org/spire-math/clouseau_2.12/0.2.2/clouseau_2.12-0.2.2.jar).
+ * [version 0.2.2, scala 2.11](https://search.maven.org/remotecontent?filepath=org/spire-math/clouseau_2.11/0.2.2/clouseau_2.11-0.2.2.jar).
+ * [version 0.2.2, scala 2.10](https://search.maven.org/remotecontent?filepath=org/spire-math/clouseau_2.10/0.2.2/clouseau_2.10-0.2.2.jar).
 
 If you had downloaded Clouseau to `path/to/clouseau.jar` you'd include
 Clouseau in your project via the following `build.sbt` configuration:
@@ -263,7 +263,7 @@ To use *clouseau-repl* from within your project, first follow the
 add the following to your `build.sbt` file:
 
 ```scala
-libraryDependencies += "org.spire-math" %% "clouseau-repl" % "0.2.0"
+libraryDependencies += "org.spire-math" %% "clouseau-repl" % "0.2.2"
 
 // this main class runs the standard scala REPL
 mainClass in Compile := Some("clouseau.Repl")
