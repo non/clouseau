@@ -53,6 +53,9 @@ enablePlugins(JavaAgent)
 javaAgents += "org.spire-math" % "clouseau_2.12" % "0.2.2" % "compile;runtime"
 ```
 
+(If you want to use Clouseau in the REPL you'll also need to add the
+snippet from [Using Clouseau in the REPL](Using Clouseau in the REPL).)
+
 ### Less Quick Start
 
 You can also use Clouseau manually using `-javaagent` explicitly.
