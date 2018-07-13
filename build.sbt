@@ -1,5 +1,11 @@
 import ReleaseTransformations._
 
+def majorVersion(s: String): String =
+  s.substring(0, s.lastIndexOf('.'))
+
+def javaAgent(v: String, m: String, prefix: String): String =
+  s"-javaagent:${prefix}target/scala-${m}/clouseau_${m}-${v}.jar"
+
 lazy val noPublish = Seq(
   publish := {},
   publishLocal := {},
@@ -35,6 +41,9 @@ lazy val clouseauSettings = Seq(
   // fatal errors).
   scalacOptions in (Compile, console) ~= { _.filterNot("-Xlint" == _) },
   scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value,
+
+  // make sure to fork for testing/repl
+  fork := true,
 
   // settings for packaging instrumentation correctly
   packageOptions in (Compile, packageBin) +=
@@ -91,18 +100,33 @@ lazy val clouseauSettings = Seq(
   )
 )
 
-lazy val core = project
+lazy val root = project
   .in(file("."))
+  .settings(clouseauSettings: _*)
+  .settings(noPublish: _*)
+  .settings(Seq(
+    name := "clouseau-root",
+    moduleName := "clouseau-root"))
+  .dependsOn(core, repl)
+  .aggregate(core, repl)
+
+lazy val core = project
+  .in(file("core"))
   .settings(clouseauSettings: _*)
   .settings(Seq(
     name := "clouseau",
-    moduleName := "clouseau"))
+    moduleName := "clouseau",
+    // we need to use the java agent when running tests
+    javaOptions += javaAgent(version.value, majorVersion(scalaVersion.value), ""),
+    // we need to package the jar before running the tests
+    (test in Test) := {
+      (Keys.`package` in Compile).value
+      (test in Test).value
+    }))
 
 lazy val repl = project
   .in(file("repl"))
-  .enablePlugins(JavaAgent)
   .settings(clouseauSettings: _*)
-  .settings(javaAgents += "org.spire-math" % "clouseau_2.12" % "0.2.0" % "compile;runtime")
   .settings(Seq(
     name := "clouseau-repl",
     moduleName := "clouseau-repl",
@@ -110,5 +134,9 @@ lazy val repl = project
       "org.scala-lang" % "scala-compiler" % scalaVersion.value ::
       Nil,
     mainClass in Compile := Some("clouseau.Repl"),
+    // we need some settings to hook up the repl's stdin/stdout
     outputStrategy := Some(StdoutOutput),
-    connectInput in run := true))
+    connectInput in run := true,
+    // we need to use the java agent when running the repl
+    javaOptions += javaAgent(version.value, majorVersion(scalaVersion.value), "../core/")))
+  .dependsOn(core)
