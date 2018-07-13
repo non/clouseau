@@ -47,9 +47,8 @@ addSbtPlugin("com.lightbend.sbt" % "sbt-javaagent" % "0.1.4")
 In `build.sbt` you'd add:
 
 ```scala
+// snippet assumes you're using scala 2.12.x; change as-needed
 enablePlugins(JavaAgent)
-
-// assumes you're using scala 2.12.x; change as-needed
 javaAgents += "org.spire-math" % "clouseau_2.12" % "0.2.2" % "compile;runtime"
 ```
 
@@ -266,15 +265,13 @@ To use *clouseau-repl* from within your project, first follow the
 add the following to your `build.sbt` file:
 
 ```scala
+// settings from the quick start section...
+
+// add a main class that runs the standard scala REPL in a new process,
+// with stdin/stdout set up correctly. (SBT work-around.)
 libraryDependencies += "org.spire-math" %% "clouseau-repl" % "0.2.2"
-
-// this main class runs the standard scala REPL
 mainClass in Compile := Some("clouseau.Repl")
-
-// allows forked processes to read from SBT's stdin
 connectInput in run := true
-
-// don't buffer stdout, so the user can see prompt, input, etc.
 outputStrategy := Some(StdoutOutput)
 ```
 
