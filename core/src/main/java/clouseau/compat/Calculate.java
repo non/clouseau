@@ -1,9 +1,9 @@
 package clouseau.compat;
 
+import clouseau.IdentitySet;
 import clouseau.Calculate.Result;
 import clouseau.Mode;
-import scala.collection.mutable.HashSet;
-import scala.collection.mutable.Set;
+import java.util.IdentityHashMap;
 
 public class Calculate {
 
@@ -19,24 +19,28 @@ public class Calculate {
         return clouseau.Calculate$.MODULE$.fullSizeOf(o);
     }
 
+    private static IdentitySet identitySet() {
+        return new IdentitySet(new IdentityHashMap());
+    }
+
     public static Result calculate(Object o) {
-        Set<Object> seen = new HashSet<Object>();
+        IdentitySet seen = identitySet();
         Mode mode = Mode.JustClass$.MODULE$;
         return clouseau.Calculate$.MODULE$.calculate(o, seen, mode);
     }
 
-    public static Result calculate(Object o, Set<Object> seen) {
+    public static Result calculate(Object o, IdentitySet seen) {
         Mode mode = Mode.JustClass$.MODULE$;
         return clouseau.Calculate$.MODULE$.calculate(o, seen, mode);
     }
 
     public static Result calculate(Object o, Mode mode) {
-        Set<Object> seen = new HashSet<Object>();
+        IdentitySet seen = identitySet();
         return clouseau.Calculate$.MODULE$.calculate(o, seen, mode);
     }
 
-    public static Result calculate(Object o, Set<Object> seen, Mode mode) {
-        if (seen == null) seen = new HashSet<Object>();
+    public static Result calculate(Object o, IdentitySet seen, Mode mode) {
+        if (seen == null) seen = identitySet();
         if (mode == null) mode = Mode.JustClass$.MODULE$;
         return clouseau.Calculate$.MODULE$.calculate(o, seen, mode);
     }

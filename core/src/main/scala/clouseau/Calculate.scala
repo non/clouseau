@@ -1,7 +1,6 @@
 package clouseau
 
 import scala.annotation.tailrec
-import scala.collection.mutable
 
 object Calculate {
 
@@ -10,23 +9,23 @@ object Calculate {
   /**
    */
   def sizeOf(o: Object): Long =
-    calculate(o, mutable.Set.empty, Mode.JustClass).bytes
+    calculate(o, IdentitySet.empty, Mode.JustClass).bytes
 
   /**
    */
   def staticSizeOf(o: Object): Long =
-    calculate(o, mutable.Set.empty, Mode.JustStatic).bytes
+    calculate(o, IdentitySet.empty, Mode.JustStatic).bytes
 
   /**
    */
   def fullSizeOf(o: Object): Long =
-    calculate(o, mutable.Set.empty, Mode.ClassAndStatic).bytes
+    calculate(o, IdentitySet.empty, Mode.ClassAndStatic).bytes
 
-  case class Result(bytes: Long, seen: mutable.Set[Long])
+  case class Result(bytes: Long, seen: IdentitySet)
 
   def calculate(
     o: Object,
-    seen: mutable.Set[Long] = mutable.Set.empty,
+    seen: IdentitySet = IdentitySet.empty,
     mode: Mode = Mode.JustClass
   ): Result = {
     val inst = Inst.instrumentation
@@ -45,10 +44,9 @@ object Calculate {
         case Instance(null, _) :: rest =>
           loop(rest, bytes)
         case Instance(o, mode) :: rest =>
-          val x = Identity.hash(o)
-          if (seen(x)) loop(rest, bytes)
+          if (seen(o)) loop(rest, bytes)
           else {
-            seen += x
+            seen += o
             val n = if (mode.includeClass) inst.getObjectSize(o) - enumCost(o) else 0L
             loop(Members.of(o, seen, mode) :: rest, bytes + n)
           }

@@ -5,23 +5,22 @@ import java.lang.reflect.AccessibleObject
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier.isStatic
 import scala.annotation.tailrec
-import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 
 object Members {
 
-  def of(o: Object, seen: mutable.Set[Long], m: Mode): SizeOf = {
+  def of(o: Object, seen: IdentitySet, m: Mode): SizeOf = {
     val x = if (m.includeClass) forInstance(o, seen, m) else SizeOf.Empty
     val y = if (m.includeStatic) forStatic(o, seen) else SizeOf.Empty
     SizeOf.Sum(x :: y :: Nil)
   }
 
-  def forInstance(o: Object, seen: mutable.Set[Long], m: Mode): SizeOf = {
+  def forInstance(o: Object, seen: IdentitySet, m: Mode): SizeOf = {
     val c = o.getClass
     if (c.isArray) forArray(o, c, seen, m) else forClass(o, c, seen, m)
   }
 
-  private def forArray(o: Object, c: Class[_], seen: mutable.Set[Long], m0: Mode): SizeOf = {
+  private def forArray(o: Object, c: Class[_], seen: IdentitySet, m0: Mode): SizeOf = {
     val m1 = m0.childMode
     if (c.getComponentType.isPrimitive) SizeOf.Empty
     else SizeOf.Sum((0 until r.Array.getLength(o)).iterator
@@ -31,7 +30,7 @@ object Members {
       .toVector)
   }
 
-  private def forClass(o: Object, c: Class[_], seen: mutable.Set[Long], m: Mode): SizeOf = {
+  private def forClass(o: Object, c: Class[_], seen: IdentitySet, m: Mode): SizeOf = {
     @tailrec def loop(c1: Class[_], buf: ArrayBuffer[Field]): Array[Field] = {
       c1.getDeclaredFields.iterator
         .filter(f => !isStatic(f.getModifiers) && !f.getType.isPrimitive)
@@ -51,12 +50,11 @@ object Members {
     }
   }
 
-  def forStatic(o: Object, seen: mutable.Set[Long]): SizeOf = {
+  def forStatic(o: Object, seen: IdentitySet): SizeOf = {
     @tailrec def loop(c1: Class[_], buf: ArrayBuffer[Field]): Array[Field] = {
-      val x = Identity.hashClass(c1)
-      if (seen(x)) buf.toArray
+      if (seen(c1)) buf.toArray
       else {
-        seen += x
+        seen += c1
         c1.getDeclaredFields.iterator
           .filter(f => isStatic(f.getModifiers))
           .foreach(f => buf += f)

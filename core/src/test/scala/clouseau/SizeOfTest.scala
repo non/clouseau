@@ -98,16 +98,6 @@ object SizeOfTest extends Properties("SizeOf") {
       sizeOf(x :: xs) > sizeOf(xs)
     }
 
-  property("(Identity.hash(x) == Identity.hash(y)) == (x eq y)") =
-    forAll { (x0: Anything, y0: Anything) =>
-      val (x, y) = (x0.value, y0.value)
-      if (x != null && y != null) {
-        (Identity.hash(x) == Identity.hash(y)) == (x eq y)
-      } else {
-        true
-      }
-    }
-
   class Prof(val name: String, val sizeOf: Int => Long)
 
   object Prof {

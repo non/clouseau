@@ -40,9 +40,8 @@ object AdHocTest extends Properties("AdHoc") {
   property("readme") = {
     import clouseau.Mode.JustClass
     import clouseau.Calculate.{calculate, sizeOf}
-    import scala.collection.mutable
 
-    val s = mutable.Set.empty[Long]
+    val s = IdentitySet.empty
 
     val m0 = (1 to 100).iterator.map(i => (i, i.toString)).toMap
     val bytes0 = calculate(m0, s, JustClass).bytes //
