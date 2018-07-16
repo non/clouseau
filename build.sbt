@@ -140,3 +140,22 @@ lazy val repl = project
     // we need to use the java agent when running the repl
     javaOptions += javaAgent(version.value, majorVersion(scalaVersion.value), "../core/")))
   .dependsOn(core)
+
+lazy val bench = project
+  .in(file("bench"))
+  .settings(clouseauSettings: _*)
+  .settings(noPublish: _*)
+  .settings(Seq(
+    name := "clouseau-bench",
+    moduleName := "clouseau-bench",
+    // libraryDependencies ++=
+    //   "org.scala-lang" % "scala-compiler" % scalaVersion.value ::
+    //   Nil,
+    // mainClass in Compile := Some("clouseau.Repl"),
+    // we need some settings to hook up the repl's stdin/stdout
+    // outputStrategy := Some(StdoutOutput),
+    // connectInput in run := true,
+    // we need to use the java agent when running the repl
+    javaOptions += javaAgent(version.value, majorVersion(scalaVersion.value), "../core/")))
+  .dependsOn(core)
+  .enablePlugins(JmhPlugin)
